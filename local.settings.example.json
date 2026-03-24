@@ -1,0 +1,11 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "GMAIL_SENDER": "your_gmail@gmail.com",
+    "GMAIL_APP_PASSWORD": "your_16_char_app_password",
+    "GMAIL_RECIPIENT": "your_gmail@gmail.com",
+    "JOBSPY_OUTPUT_DIR": "/tmp/jobspy-output"
+  }
+}
