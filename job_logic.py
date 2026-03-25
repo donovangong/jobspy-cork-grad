@@ -9,16 +9,7 @@ from jobspy import scrape_jobs
 
 
 SEARCH_TERMS = [
-    "graduate devops",
-    "graduate sre",
-    "graduate cloud engineer",
-    "graduate platform engineer",
-    "graduate infrastructure engineer",
-    "graduate production support",
-    "graduate site reliability engineer",
-    "entry level devops",
-    "entry level cloud engineer",
-    "graduate software engineer",
+    "graduate",
 ]
 
 EXCLUDE_TERMS = [
@@ -85,13 +76,6 @@ def filter_jobs(df: pd.DataFrame) -> pd.DataFrame:
 
     # 只保留 Cork
     df = df[df["location"].str.contains("Cork", case=False, na=False)]
-
-    # 只保留 graduate / entry-level / junior / trainee / intern / new grad
-    graduate_mask = (
-        df["title"].str.contains(r"graduate|entry|junior|intern|trainee|new grad", case=False, na=False)
-        | df["description"].str.contains(r"graduate|entry.?level|junior|intern|trainee|new grad", case=False, na=False)
-    )
-    df = df[graduate_mask]
 
     # 排除明显 senior 岗位
     exclude_mask = (
