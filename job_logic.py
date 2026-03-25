@@ -80,9 +80,19 @@ def filter_jobs(df: pd.DataFrame) -> pd.DataFrame:
     df["date_posted"] = df["date_posted"].fillna("")
     df["search_term"] = df["search_term"].fillna("")
 
+    df["dedupe_key"] = (
+        df["title"].str.lower().str.strip()
+        + " | "
+        + df["company"].str.lower().str.strip()
+        + " | "
+        + df["location"].str.lower().str.strip()
+    )
+    df = df.drop_duplicates(subset=["dedupe_key"])
+
+    df["description"] = df["description"].apply(lambda x: clean_description(x, max_len=500))
 
     # 只保留展示需要的列
-    keep_cols = ["title", "company", "site", "location", "date_posted", "search_term", "job_url"]
+    keep_cols = ["title", "company", "location", "date_posted", "description"]
     for c in keep_cols:
         if c not in df.columns:
             df[c] = ""
@@ -104,20 +114,15 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
         for _, row in df.iterrows():
             title = normalize_text(row.get("title"))
             company = normalize_text(row.get("company"))
-            site = normalize_text(row.get("site"))
             location = normalize_text(row.get("location"))
             posted = normalize_text(row.get("date_posted"))
-            search_term = normalize_text(row.get("search_term"))
+            description = normalize_text(row.get("description"))
             url = normalize_text(row.get("job_url"))
 
             safe_url = url if url else "#"
             title_html = (
                 f'<a href="{safe_url}" target="_blank" rel="noopener noreferrer">{title}</a>'
                 if url else title
-            )
-            open_html = (
-                f'<a href="{safe_url}" target="_blank" rel="noopener noreferrer">Open</a>'
-                if url else ""
             )
 
             rows.append(f"""
@@ -157,18 +162,27 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
       border-collapse: collapse;
       width: 100%;
       font-size: 14px;
+      table-layout: fixed;
     }}
     th, td {{
       border: 1px solid #ddd;
       padding: 8px;
       vertical-align: top;
       text-align: left;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
     }}
     th {{
       background: #f5f5f5;
       position: sticky;
       top: 0;
     }}
+    th:nth-child(1), td:nth-child(1) {{ width: 20%; }}
+    th:nth-child(2), td:nth-child(2) {{ width: 18%; }}
+    th:nth-child(3), td:nth-child(3) {{ width: 16%; }}
+    th:nth-child(4), td:nth-child(4) {{ width: 14%; }}
+    th:nth-child(5), td:nth-child(5) {{ width: 32%; }}
+
     a {{
       text-decoration: none;
     }}
@@ -185,11 +199,9 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
       <tr>
         <th>Title</th>
         <th>Company</th>
-        <th>Site</th>
         <th>Location</th>
         <th>Posted</th>
-        <th>Search Term</th>
-        <th>Link</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody>
