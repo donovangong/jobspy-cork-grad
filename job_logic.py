@@ -51,7 +51,7 @@ def scrape_all_jobs() -> pd.DataFrame:
                 jobs = scrape_jobs(
                     site_name=[site],
                     search_term=term,
-                    location="Cork, Ireland",
+                    location="Dublin, Ireland",
                     results_wanted=100,
                     hours_old=24,
                     country_indeed="Ireland",
@@ -148,7 +148,7 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>JobSpy Cork Graduate</title>
+  <title>JobSpy Dublin Graduate</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {{
@@ -197,7 +197,7 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
   </style>
 </head>
 <body>
-  <h1>Cork Graduate Jobs</h1>
+  <h1>Dublin Graduate Jobs</h1>
   <div class="meta">Last updated: {generated_at} UTC</div>
   <table>
     <thead>
