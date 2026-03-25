@@ -24,3 +24,4 @@ Add this repo secret:
 - `AZURE_FUNCTIONAPP_PUBLISH_PROFILE`
 
 Value: contents of the publish profile downloaded from your Azure Function App.
+https://donovangong.github.io/jobspy-cork-grad/
