@@ -10,6 +10,12 @@ from jobspy import scrape_jobs
 
 SEARCH_TERMS = [
     "graduate",
+    "graduate programme",
+    "entry level",
+    "junior",
+    "trainee",
+    "associate",
+    "new grad",
 ]
 
 EXCLUDE_TERMS = [
@@ -38,8 +44,8 @@ def scrape_all_jobs() -> pd.DataFrame:
                     site_name=[site],
                     search_term=term,
                     location="Cork, Ireland",
-                    results_wanted=30,
-                    hours_old=24,
+                    results_wanted=100,
+                    hours_old=120,
                     country_indeed="Ireland",
                 )
                 if jobs is not None and not jobs.empty:
@@ -74,25 +80,6 @@ def filter_jobs(df: pd.DataFrame) -> pd.DataFrame:
     df["date_posted"] = df["date_posted"].fillna("")
     df["search_term"] = df["search_term"].fillna("")
 
-    # 只保留 Cork
-    df = df[df["location"].str.contains("Cork", case=False, na=False)]
-
-    # 排除明显 senior 岗位
-    exclude_mask = (
-        df["title"].str.contains(r"senior|staff|principal|lead|manager|director|head|vp", case=False, na=False)
-        | df["description"].str.contains(r"senior|staff|principal|lead|manager|director|head|vp", case=False, na=False)
-    )
-    df = df[~exclude_mask]
-
-    # 去重
-    df["dedupe_key"] = (
-        df["title"].str.lower().str.strip()
-        + " | "
-        + df["company"].str.lower().str.strip()
-        + " | "
-        + df["location"].str.lower().str.strip()
-    )
-    df = df.drop_duplicates(subset=["dedupe_key"])
 
     # 只保留展示需要的列
     keep_cols = ["title", "company", "site", "location", "date_posted", "search_term", "job_url"]
