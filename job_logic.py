@@ -33,14 +33,11 @@ def normalize_text(value: Any) -> str:
         return ""
     return str(value).strip()
     
-def clean_description(text: Any, max_len: int = 500) -> str:
+def clean_description(text: Any) -> str:
     text = normalize_text(text)
     if not text:
         return ""
-    text = " ".join(text.split())
-    if len(text) > max_len:
-        return text[:max_len].rstrip() + "..."
-    return text
+    return " ".join(text.split())
 
 def scrape_all_jobs() -> pd.DataFrame:
     frames = []
@@ -97,7 +94,7 @@ def filter_jobs(df: pd.DataFrame) -> pd.DataFrame:
     )
     df = df.drop_duplicates(subset=["dedupe_key"])
 
-    df["description"] = df["description"].apply(lambda x: clean_description(x, max_len=500))
+    df["description"] = df["description"].apply(clean_description)
 
     # 只保留展示需要的列
     keep_cols = ["title", "company", "location", "date_posted", "description", "job_url"]
