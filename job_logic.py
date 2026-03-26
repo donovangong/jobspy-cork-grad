@@ -73,7 +73,7 @@ def filter_jobs(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.copy()
 
-    for col in ["title", "company", "location", "date_posted", "description", "job_url"]:
+    for col in ["title", "company", "location", "site", "description", "job_url"]:
         if col not in df.columns:
             df[col] = ""
 
@@ -82,7 +82,7 @@ def filter_jobs(df: pd.DataFrame) -> pd.DataFrame:
     df["location"] = df["location"].fillna("")
     df["description"] = df["description"].fillna("")
     df["job_url"] = df["job_url"].fillna("")
-    df["date_posted"] = df["date_posted"].fillna("")
+    df["site"] = df["site"].fillna("")
 
 
     df["dedupe_key"] = (
@@ -97,12 +97,12 @@ def filter_jobs(df: pd.DataFrame) -> pd.DataFrame:
     df["description"] = df["description"].apply(clean_description)
 
     # 只保留展示需要的列
-    keep_cols = ["title", "company", "location", "date_posted", "description", "job_url"]
+    keep_cols = ["title", "company", "location", "site", "description", "job_url"]
     for c in keep_cols:
         if c not in df.columns:
             df[c] = ""
 
-    df = df[keep_cols].sort_values(by=["date_posted", "title"], ascending=[False, True])
+    df = df[keep_cols].sort_values(by=["title"], ascending=[True])
 
     return df
 
@@ -120,7 +120,7 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
             title = normalize_text(row.get("title"))
             company = normalize_text(row.get("company"))
             location = normalize_text(row.get("location"))
-            posted = normalize_text(row.get("date_posted"))
+            site = normalize_text(row.get("site"))
             url = normalize_text(row.get("job_url"))
 
             safe_url = url if url else "#"
@@ -134,7 +134,7 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
               <td>{title_html}</td>
               <td>{company}</td>
               <td>{location}</td>
-              <td>{posted}</td>
+              <td>{site}</td>
             </tr>
             """)
 
@@ -203,7 +203,7 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
         <th>Title</th>
         <th>Company</th>
         <th>Location</th>
-        <th>Posted</th>
+        <th>Site</th>
       </tr>
     </thead>
     <tbody>
