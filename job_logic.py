@@ -16,6 +16,9 @@ SEARCH_TERMS = [
     "trainee",
     "associate",
     "new grad",
+    "devops",
+    "sre",
+    "site reliability",
 ]
 
 EXCLUDE_TERMS = [
