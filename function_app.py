@@ -5,7 +5,7 @@ from job_logic import run_pipeline
 
 app = func.FunctionApp()
 
-@app.timer_trigger(schedule="0 0 8,14,21 * * *", arg_name="mytimer", run_on_startup=False, use_monitor=True)
+@app.timer_trigger(schedule="0 0 8,13,20 * * *", arg_name="mytimer", run_on_startup=False, use_monitor=True)
 def daily_jobspy_runner(mytimer: func.TimerRequest) -> None:
     logging.info("JobSpy timer trigger started.")
     try:
