@@ -18,6 +18,8 @@ SEARCH_TERMS = [
     "new grad",
     "devops",
     "sre",
+    "tech",
+    "IT",
     "site reliability",
 ]
 
