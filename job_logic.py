@@ -203,7 +203,7 @@ def build_html(df: pd.DataFrame, generated_at: str) -> str:
   <h1>Dublin Graduate Jobs</h1>
   <div class="meta">Last updated: {generated_at} UTC</div>
   <div class="meta">
-    <a href="jobs.csv" download>Download filtered CSV</a>
+    <a href="jobs-dublin.csv" download>Download filtered CSV</a>
   </div>
   <table>
     <thead>
@@ -272,7 +272,7 @@ def run_pipeline() -> Dict[str, Any]:
     html_bytes = html.encode("utf-8")
 
     html_path = f"{DOCS_DIR}/index.html"
-    csv_path = f"{DOCS_DIR}/jobs.csv"
+    csv_path = f"{DOCS_DIR}/jobs-dublin.csv"
 
     github_put_file(
         html_path,
